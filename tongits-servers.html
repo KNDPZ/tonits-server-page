@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Tong-its — Choose a Server</title>
+<meta name="description" content="Pick a Tong-its server: main, test, legacy, or the original offline build. Tara, laro na!" />
+<meta name="theme-color" content="#0a2118" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" />
+<style>
+  /* ============================================================
+     Same "Gabi ng Tong-its" identity as the game client:
+     night-market palette, tungsten gold, capiz-cream cards.
+     ============================================================ */
+  :root{
+    --gold:#f6b73c; --gold-hi:#ffdf8e; --gold-deep:#c98a16; --gold-dim:rgba(246,183,60,.55);
+    --cream:#fbf4e0; --cream-soft:#efe3c4; --ink:#211c14;
+    --danger:#e4574d; --info:#37b5a7; --good:#3ecf8e;
+    --night-1:#123526; --night-2:#0a2118; --night-3:#051009;
+    --panel:rgba(6,26,18,.55); --line:rgba(246,183,60,.14);
+    --txt-dim:#9cc3ac; --txt-soft:#cfe4d6;
+    --display:'Baloo 2',ui-rounded,'Segoe UI',system-ui,sans-serif;
+    --body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;min-height:100%;}
+  body{font-family:var(--body);color:var(--cream);-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(90% 55% at 50% -12%, rgba(246,183,60,.16), transparent 60%),
+      radial-gradient(130% 100% at 50% -10%, var(--night-1) 0%, var(--night-2) 55%, var(--night-3) 100%);
+    background-attachment:fixed;
+    padding:calc(26px + var(--sat)) 18px calc(30px + var(--sab));}
+  ::selection{background:var(--gold);color:var(--ink);}
+  .wrap{max-width:760px;margin:0 auto;}
+
+  /* ---- hero brand (fanned cards + gold logo, same as the lobby) ---- */
+  .hero{display:flex;align-items:center;gap:16px;margin-bottom:6px;}
+  .fan{position:relative;width:74px;height:64px;flex:0 0 auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5));}
+  .fan i{position:absolute;left:50%;top:52%;width:38px;height:54px;border-radius:7px;font-style:normal;
+    background:linear-gradient(165deg,#fffef8,var(--cream) 60%,#f1e6c8);color:#26221a;
+    font-family:var(--display);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.45), inset 0 0 0 1px rgba(120,90,30,.15);
+    transform-origin:50% 90%;animation:fanin .7s cubic-bezier(.2,1.4,.4,1) both;}
+  .fan i.c1{transform:translate(-50%,-50%) rotate(-16deg);}
+  .fan i.c2{transform:translate(-50%,-52%);color:#c8372c;animation-delay:.08s;}
+  .fan i.c3{transform:translate(-50%,-50%) rotate(16deg);color:#c8372c;animation-delay:.16s;}
+  @keyframes fanin{from{transform:translate(-50%,-30%);opacity:0;}}
+  h1{margin:0;font-family:var(--display);font-weight:800;font-size:40px;line-height:1;letter-spacing:.3px;
+    background:linear-gradient(180deg,var(--gold-hi) 10%,var(--gold) 52%,var(--gold-deep) 95%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 2px 0 rgba(0,0,0,.35));}
+  .tagline{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--txt-dim);font-weight:800;margin-top:4px;}
+  .lead{color:var(--txt-soft);font-size:14.5px;line-height:1.55;margin:12px 0 22px;}
+  .lead b{color:var(--gold);}
+
+  /* ---- server cards ---- */
+  .servers{display:flex;flex-direction:column;gap:14px;}
+  .srv{display:flex;align-items:center;gap:16px;text-align:left;width:100%;
+    background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;
+    color:var(--cream);font-family:var(--body);cursor:pointer;backdrop-filter:blur(4px);
+    box-shadow:0 6px 20px rgba(0,0,0,.3);transition:border-color .15s, background .15s, transform .12s;}
+  .srv:hover{border-color:var(--gold-dim);background:rgba(246,183,60,.06);transform:translateY(-2px);}
+  .srv:active{transform:translateY(0);}
+  .srv:focus-visible{outline:3px solid #fff;outline-offset:2px;}
+  .srv .glyph{width:52px;height:52px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-size:23px;
+    background:radial-gradient(circle at 30% 25%, #2f9a70, #135038);box-shadow:inset 0 0 0 1.5px rgba(246,183,60,.4);}
+  .srv .info{flex:1;min-width:0;}
+  .srv .name{font-family:var(--display);font-weight:800;font-size:19px;color:#fff8ea;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+  .srv .desc{color:#a9c9ba;font-size:13px;line-height:1.5;margin-top:3px;}
+  .srv .url{color:var(--txt-dim);font-size:11.5px;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .srv .go{font-family:var(--display);font-weight:800;font-size:22px;color:var(--gold);flex:0 0 auto;}
+  .tagchip{font-family:var(--display);font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;}
+  .tagchip.main{color:#3a2604;background:linear-gradient(180deg,var(--gold-hi),var(--gold));box-shadow:0 1px 0 var(--gold-deep);}
+  .tagchip.test{color:#04302a;background:linear-gradient(180deg,#8fe9dd,var(--info));}
+  .tagchip.legacy{color:#e7f1ea;background:rgba(255,255,255,.12);}
+  .tagchip.offline{color:#fff;background:rgba(228,87,77,.65);}
+  /* the featured (current) server gets a gold ring so it reads as the default pick */
+  .srv.featured{border-color:rgba(246,183,60,.55);box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 0 0 1.5px rgba(246,183,60,.35);}
+  .srv.featured .glyph{background:radial-gradient(circle at 30% 25%, var(--gold-hi), var(--gold-deep));font-size:25px;}
+
+  footer{margin-top:26px;color:var(--txt-dim);font-size:12px;text-align:center;line-height:1.6;}
+
+  /* ---- confirm popup (same modal language as the game) ---- */
+  .scrim{position:fixed;inset:0;background:rgba(3,12,8,.78);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:18px;z-index:100;}
+  .scrim.show{display:flex;}
+  .modal{background:
+      radial-gradient(120% 60% at 50% -10%, rgba(246,183,60,.1), transparent 60%),
+      linear-gradient(180deg,#124130,#0a2c1f);
+    border-radius:22px;max-width:460px;width:100%;padding:24px;
+    box-shadow:0 24px 70px rgba(0,0,0,.65), inset 0 0 0 1.5px rgba(246,183,60,.38), inset 0 1px 0 rgba(255,255,255,.12);}
+  .modal h2{font-family:var(--display);margin:0 0 4px;color:var(--gold);font-size:23px;font-weight:800;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .modal .m-url{color:var(--txt-dim);font-size:12px;word-break:break-all;margin-bottom:10px;}
+  .modal p{font-size:14px;line-height:1.55;color:var(--cream-soft);margin:10px 0;}
+  .m-warn{display:flex;gap:10px;background:rgba(228,87,77,.12);border:1px solid rgba(228,87,77,.4);
+    border-radius:13px;padding:11px 13px;font-size:13px;line-height:1.5;color:#ffd9d4;}
+  .m-warn.soft{background:rgba(246,183,60,.1);border-color:rgba(246,183,60,.4);color:#ffe9bd;}
+  .m-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap;}
+  button{font-family:var(--display);font-weight:700;cursor:pointer;border:none;border-radius:12px;padding:11px 20px;font-size:14px;color:#3a2604;
+    background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--gold-deep));
+    box-shadow:0 3px 0 #8f6410, 0 7px 14px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.55);
+    transition:transform .07s, box-shadow .07s, filter .16s;}
+  button:hover{filter:brightness(1.06);}
+  button:active{transform:translateY(3px);box-shadow:0 0 0 #8f6410,0 2px 5px rgba(0,0,0,.38);}
+  button:focus-visible{outline:3px solid #fff;outline-offset:2px;}
+  button.ghost{background:rgba(255,255,255,.055);color:var(--cream);box-shadow:inset 0 0 0 1.5px var(--gold-dim);font-weight:600;}
+  button.ghost:active{transform:translateY(1px);}
+
+  @media (max-width:560px){
+    body{padding:calc(18px + var(--sat)) 12px calc(24px + var(--sab));}
+    h1{font-size:32px;}
+    .srv{padding:13px 14px;gap:12px;}
+    .srv .glyph{width:44px;height:44px;font-size:19px;}
+    .srv .name{font-size:17px;}
+    .srv .url{white-space:normal;word-break:break-all;}
+    .m-actions button{flex:1;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="fan" aria-hidden="true"><i class="c1">A♠</i><i class="c2">T♥</i><i class="c3">?♦</i></span>
+    <div>
+      <h1>Tong&#8209;its</h1>
+      <div class="tagline">Choose a server · Tara, laro na!</div>
+    </div>
+  </div>
+
+  <p class="lead">All servers run the same Tong-its rules, but each is a <b>separate world</b> —
+  rooms, players, and your on-device record don't carry between them. Pick where you want to play:</p>
+
+  <!-- Server cards are rendered here by the script below -->
+  <div class="servers" id="servers"></div>
+
+  <footer>Free · no sign-up · no coins. Made for kapamilya, kabarkada, at kapitbahay. 🃏</footer>
+</div>
+
+<!-- ============ confirm popup (filled in by JS before showing) ============ -->
+<div class="scrim" id="confirmScrim" role="dialog" aria-modal="true" aria-labelledby="mName">
+  <div class="modal">
+    <h2><span id="mGlyph">🃏</span> <span id="mName">Server</span> <span class="tagchip main" id="mTag">MAIN</span></h2>
+    <div class="m-url" id="mUrl"></div>
+    <p id="mDesc"></p>
+    <div class="m-warn" id="mWarn"><span aria-hidden="true">⚠️</span><span id="mWarnText"></span></div>
+    <div class="m-actions">
+      <button class="ghost" id="mCancel">Stay here</button>
+      <button id="mGo">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==============================================================
+   SERVER LIST — edit this array to add / remove / reorder servers.
+
+   Each entry:
+     id       : short unique key (used for DOM/testing only)
+     name     : display name on the card and popup
+     url      : where "Continue" sends the player
+     tag      : chip text, e.g. "MAIN", "TEST", "LEGACY", "OFFLINE"
+     tagClass : chip color — one of: "main" (gold) | "test" (teal)
+                | "legacy" (gray) | "offline" (red)
+     glyph    : emoji shown in the round badge
+     desc     : one-liner on the card
+     warn     : text inside the popup's warning box
+     warnSoft : true = amber "heads-up" box, false = red "warning" box
+     featured : true = gold ring + top-of-list styling.
+                >>> Keep `featured: true` on whichever server is the
+                >>> CURRENT main one — move the flag when that changes.
+
+   To add a new server in the future, copy one block, tweak the
+   fields, and drop it anywhere in the array (order here = order
+   on the page).
+   ============================================================== */
+const SERVERS = [
+
+  { // ---- MAIN — the current live server (featured) -------------
+    id: "main",
+    name: "Main Server",
+    url: "https://tongits.playy.online/",
+    tag: "MAIN", tagClass: "main",
+    glyph: "🏆",
+    desc: "The current live version. Tested updates land here — play here by default.",
+    warn: "You're heading to the main server. Anyone online can see your tables and world chat — pick a name you're happy with!",
+    warnSoft: true,
+    featured: true,
+  },
+
+  { // ---- TEST — new features & bug fixes land here first -------
+    id: "test",
+    name: "Test Server",
+    url: "https://test-tongits.playy.online/",
+    tag: "TEST", tagClass: "test",
+    glyph: "🧪",
+    desc: "Bug fixes, updates, and face-lifts appear here first. Issues reported on Main get fixed here before anywhere else.",
+    warn: "This is the testing ground — things may change, break, or reset without notice while fixes are being tried out. If something acts weird here, that's kind of the point.",
+    warnSoft: false,
+  },
+
+  { // ---- OLD — frozen legacy design ------------------------------
+    id: "old",
+    name: "Old Design",
+    url: "https://old-tongits.playy.online/",
+    tag: "LEGACY", tagClass: "legacy",
+    glyph: "🕰️",
+    desc: "The previous look of the game, kept as-is. It will not receive changes.",
+    warn: "This version is frozen for nostalgia — no new fixes or features will ever land here, and players here can't see rooms on the other servers.",
+    warnSoft: true,
+  },
+
+  { // ---- OFFLINE — the original build where it all started -------
+    id: "offline",
+    name: "Offline Version",
+    url: "https://tongits.pages.dev/",
+    tag: "OFFLINE", tagClass: "offline",
+    glyph: "🌱",
+    desc: "Where everything started — the original offline build.",
+    warn: "This is the original single-device build: no online rooms, no world chat, no other players. Great for practice or when your signal is bad.",
+    warnSoft: true,
+  },
+
+  /* ---- TEMPLATE — copy this to add a new server -----------------
+  {
+    id: "beta2",
+    name: "Beta 2",
+    url: "https://beta2-tongits.playy.online/",
+    tag: "BETA", tagClass: "test",
+    glyph: "🚧",
+    desc: "Describe what's special about this server.",
+    warn: "What should players know before they jump in?",
+    warnSoft: true,
+    // featured: true,   // <- uncomment (and remove it from Main) if this becomes the current server
+  },
+  ----------------------------------------------------------------- */
+];
+
+/* ---------- render the cards (no need to touch below) ---------- */
+const list = document.getElementById("servers");
+// featured server(s) float to the top, otherwise keep array order
+[...SERVERS].sort((a,b)=>(b.featured?1:0)-(a.featured?1:0)).forEach(s=>{
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "srv" + (s.featured ? " featured" : "");
+  btn.dataset.server = s.id;
+  btn.innerHTML = `
+    <span class="glyph" aria-hidden="true">${s.glyph}</span>
+    <span class="info">
+      <span class="name">${s.name} <span class="tagchip ${s.tagClass}">${s.tag}</span></span>
+      <span class="desc">${s.desc}</span>
+      <span class="url">${s.url}</span>
+    </span>
+    <span class="go" aria-hidden="true">→</span>`;
+  btn.addEventListener("click", ()=>openConfirm(s));
+  list.appendChild(btn);
+});
+
+/* ---------- confirm popup before leaving to a server ---------- */
+const scrim = document.getElementById("confirmScrim");
+let pending = null;   // the server the player is about to visit
+
+function openConfirm(s){
+  pending = s;
+  document.getElementById("mGlyph").textContent = s.glyph;
+  document.getElementById("mName").textContent  = s.name;
+  const tag = document.getElementById("mTag");
+  tag.textContent = s.tag; tag.className = "tagchip " + s.tagClass;
+  document.getElementById("mUrl").textContent  = s.url;
+  document.getElementById("mDesc").textContent = s.desc;
+  document.getElementById("mWarnText").textContent = s.warn;
+  document.getElementById("mWarn").className = "m-warn" + (s.warnSoft ? " soft" : "");
+  scrim.classList.add("show");
+  document.getElementById("mGo").focus();
+}
+function closeConfirm(){ scrim.classList.remove("show"); pending = null; }
+
+document.getElementById("mCancel").addEventListener("click", closeConfirm);
+scrim.addEventListener("click", e=>{ if(e.target===scrim) closeConfirm(); }); // tap outside = cancel
+window.addEventListener("keydown", e=>{ if(e.key==="Escape") closeConfirm(); });
+document.getElementById("mGo").addEventListener("click", ()=>{
+  if(pending) location.href = pending.url;   // same-tab; use window.open(pending.url) for a new tab instead
+});
+</script>
+</body>
+</html>
