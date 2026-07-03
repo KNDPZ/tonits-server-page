@@ -53,6 +53,15 @@
     -webkit-background-clip:text;background-clip:text;color:transparent;
     filter:drop-shadow(0 2px 0 rgba(0,0,0,.35));}
   .tagline{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--txt-dim);font-weight:800;margin-top:4px;}
+  /* ---- tab bar linking to the sibling pages (patch notes, releases,
+     announcements). Each of those files has the same bar with its own
+     link marked class="on". If you add a new page, add its link here too. */
+  .tabs{display:flex;gap:6px;background:rgba(6,26,18,.55);border-radius:999px;padding:5px;
+    box-shadow:inset 0 0 0 1px var(--line);margin:16px 0 4px;flex-wrap:wrap;}
+  .tabs a{flex:1;text-align:center;text-decoration:none;color:var(--txt-soft);font-family:var(--display);
+    font-weight:700;font-size:13px;padding:9px 8px;border-radius:999px;white-space:nowrap;}
+  .tabs a:hover{color:var(--gold);}
+  .tabs a.on{background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#3a2604;box-shadow:0 2px 0 #8f6410;}
   .lead{color:var(--txt-soft);font-size:14.5px;line-height:1.55;margin:12px 0 22px;}
   .lead b{color:var(--gold);}
 
@@ -118,6 +127,7 @@
     .srv .name{font-size:17px;}
     .srv .url{white-space:normal;word-break:break-all;}
     .m-actions button{flex:1;}
+    .tabs a{font-size:12px;padding:8px 4px;}
   }
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important;} }
 </style>
@@ -132,6 +142,15 @@
       <div class="tagline">Choose a server · Tara, laro na!</div>
     </div>
   </div>
+
+  <!-- ===== tabs to the other pages (each is its own standalone HTML file,
+       so editing patch notes can never break this server list) ===== -->
+  <nav class="tabs">
+    <a href="index.html" class="on">🖥️ Servers</a>
+    <a href="patch-notes.html">🧪 Test patches</a>
+    <a href="releases.html">🏆 Main releases</a>
+    <a href="announcements.html">📣 Announcements</a>
+  </nav>
 
   <p class="lead">All servers run the same Tong-its rules, but each is a <b>separate world</b> —
   rooms, players, and your on-device record don't carry between them. Pick where you want to play:</p>
